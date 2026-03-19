@@ -238,6 +238,23 @@ function buildContainerArgs(
     args.push('-e', 'CLAUDE_CODE_OAUTH_TOKEN=placeholder');
   }
 
+  // OpenCode configuration - pass API key via env var for SDK
+  args.push('-e', `ANTHROPIC_API_KEY=${process.env.ANTHROPIC_API_KEY || ''}`);
+
+  // OpenCode server URL, username and password (if connecting to external server)
+  const opencodeServerUrl = process.env.OPENCODE_SERVER_URL;
+  if (opencodeServerUrl) {
+    args.push('-e', `OPENCODE_SERVER_URL=${opencodeServerUrl}`);
+    const opencodeUsername = process.env.OPENCODE_SERVER_USERNAME;
+    if (opencodeUsername) {
+      args.push('-e', `OPENCODE_SERVER_USERNAME=${opencodeUsername}`);
+    }
+    const opencodePassword = process.env.OPENCODE_SERVER_PASSWORD;
+    if (opencodePassword) {
+      args.push('-e', `OPENCODE_SERVER_PASSWORD=${opencodePassword}`);
+    }
+  }
+
   // Runtime-specific args for host gateway resolution
   args.push(...hostGatewayArgs());
 
